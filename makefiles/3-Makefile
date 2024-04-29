@@ -6,15 +6,8 @@ NAME = school
 RM = rm -f
 
 # Default target
-all: $(NAME)
-
-# Build executable
-$(NAME): $(OBJ)
-    $(CC) $(OBJ) -o $(NAME)
-
-# Compile source files to object files
-%.o: %.c
-    $(CC) -c $< -o $@
+all: $(OBJ)
+	$(CC) $(SRC) -o $(NAME)
 
 # Rules for cleaning files
 clean:
