@@ -1,0 +1,29 @@
+# Define variables
+CC = gcc
+SRC = main.c school.c
+OBJ = $(SRC:.c=.o)
+NAME = school
+RM = rm -f
+
+# Default target
+all: $(NAME)
+
+# Build executable
+$(NAME): $(OBJ)
+    $(CC) $(OBJ) -o $(NAME)
+
+# Compile source files to object files
+%.o: %.c
+    $(CC) -c $< -o $@
+
+# Rules for cleaning files
+clean:
+    $(RM) *~ $(NAME)
+
+oclean:
+    $(RM) $(OBJ)
+
+fclean: clean oclean
+
+# Force recompile of all source files
+re: fclean all
