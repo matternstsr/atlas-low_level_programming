@@ -5,18 +5,11 @@ OBJ = $(SRC:.c=.o)
 NAME = school
 RM = rm -f
 
-# Default target
 all: $(OBJ)
 	$(CC) $(SRC) -o $(NAME)
-
-# Rules for cleaning files
 clean:
     $(RM) *~ $(NAME)
-
 oclean:
     $(RM) $(OBJ)
-
 fclean: clean oclean
-
-# Force recompile of all source files
 re: fclean all
