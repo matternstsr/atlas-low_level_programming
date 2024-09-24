@@ -118,7 +118,7 @@ void shash_table_delete(shash_table_t *ht)
 	shash_node_t *temp;
 
 	if (!ht)
-		return ();
+		return;
 
 	for (i = 0; i < ht->size; i++)
 	{

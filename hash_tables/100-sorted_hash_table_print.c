@@ -9,7 +9,7 @@ void shash_table_print(const shash_table_t *ht)
 	shash_node_t *current;
 
 	if (!ht)
-		return ();
+		return;
 
 	current = ht->shead;
 	printf("{");
@@ -32,7 +32,7 @@ void shash_table_print_rev(const shash_table_t *ht)
 	shash_node_t *current;
 
 	if (!ht)
-		return ();
+		return;
 
 	current = ht->stail;
 	printf("{");
