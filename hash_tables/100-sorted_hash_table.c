@@ -58,19 +58,10 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
     /* Insert into sorted linked list */
     current = ht->shead, prev = NULL;
 
-    new_node->key = strdup(key);
-    if (!new_node->key)
+    while (current && strcmp(current->key, key) < 0)
     {
-        free(new_node);
-        return 0; /* Memory allocation failed */
-    }
-
-    new_node->value = strdup(value);
-    if (!new_node->value)
-    {
-    free(new_node->key);
-    free(new_node);
-    return 0; /* Memory allocation failed */
+        prev = current;
+        current = current->snext;
     }
 
     if (current && strcmp(current->key, key) == 0)
