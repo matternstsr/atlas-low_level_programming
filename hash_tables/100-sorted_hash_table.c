@@ -62,9 +62,9 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 	{
 		free(current->value);
 		current->value = strdup(value);
-		free(new_node->key);
-		free(new_node->value);
-		free(new_node);
+		/* free(new_node->key); */
+		/* free(new_node->value); */
+		/* free(new_node); */
 		return (1);
 	}
 	new_node->snext = current;
