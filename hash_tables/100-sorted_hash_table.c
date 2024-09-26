@@ -39,12 +39,16 @@ shash_table_t *shash_table_create(unsigned long int size)
 int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 {
 	unsigned long int index;
-	shash_node_t *new_node;
+	shash_node_t *new_node, *temp_node;
 	shash_node_t *current, *prev;
 
 	if (!ht || !key || !value)
 		return (0);
 	index = hash_djb2((unsigned char *)key) % ht->size;
+	temp_node = ht->array[index];
+	for (;temp_node; temp_node = temp_node->next)
+		if (!strcmp(temp_node->key, key))
+			return (free(temp_node->value), temp_node->value = strdup(value), 1);
 	new_node = malloc(sizeof(shash_node_t));
 	if (!new_node)
 		return (0);
@@ -62,9 +66,9 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 	{
 		free(current->value);
 		current->value = strdup(value);
-		/* free(new_node->key); */
-		/* free(new_node->value); */
-		/* free(new_node); */
+		free(new_node->key);
+		free(new_node->value);
+		free(new_node);
 		return (1);
 	}
 	new_node->snext = current;
