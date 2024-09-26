@@ -38,46 +38,63 @@ shash_table_t *shash_table_create(unsigned long int size)
 */
 int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 {
-	unsigned long int index;
-	shash_node_t *new_node;
-	shash_node_t *current, *prev;
+    unsigned long int index;
+    shash_node_t *new_node;
+    shash_node_t *current, *prev;
 
-	if (!ht || !key || !value)
-		return (0);
-	index = hash_djb2((unsigned char *)key) % ht->size;
-	new_node = malloc(sizeof(shash_node_t));
-	if (!new_node)
-		return (0);
-	new_node->key = strdup(key);
-	new_node->value = strdup(value);
-	new_node->next = ht->array[index];
-	ht->array[index] = new_node;
-	current = ht->shead, prev = NULL;  /* Insert into sorted linked list */
-	while (current && strcmp(current->key, key) < 0)
+    if (!ht || !key || !value)
+        return (0);
+    index = hash_djb2((unsigned char *)key) % ht->size;
+    /* Create new node */
+    new_node = malloc(sizeof(shash_node_t));
+    if (!new_node)
+        return (0);
+    new_node->key = strdup(key);
+    new_node->value = strdup(value);
+   
+    if (!new_node->key || !new_node->value)
 	{
-		prev = current;
-		current = current->snext;
-	}
-	if (current && strcmp(current->key, key) == 0)
-	{
-		free(current->value);
-		current->value = strdup(value);
-		free(new_node->key);
-		free(new_node->value);
-		free(new_node);
-		return (1);
-	}
-	new_node->snext = current;
-	new_node->sprev = prev;
-	if (prev)
-		prev->snext = new_node;
-	else
-		ht->shead = new_node;
-	if (current)
-		current->sprev = new_node;
-	else
-		ht->stail = new_node;
-	return (1);
+        free(new_node->key);
+        free(new_node->value);
+        free(new_node);
+        return (0);
+    }
+    new_node->next = ht->array[index];
+    ht->array[index] = new_node;
+    /* Insert into the sorted linked list */
+    current = ht->shead, prev = NULL;
+    while (current && strcmp(current->key, key) < 0)
+    {
+        prev = current;
+        current = current->snext;
+    }
+    /* If key already exists, update the value */
+    if (current && strcmp(current->key, key) == 0)
+    {
+        free(current->value); /* Free old value */
+        current->value = strdup(value);
+        if (!current->value)
+		{
+            /* Handle strdup failure */
+            return (0);
+        }
+        free(new_node->key);
+        free(new_node->value);
+        free(new_node);
+        return (1);
+    }
+    /* Insert the new node in the sorted order */
+    new_node->snext = current;
+    new_node->sprev = prev;
+    if (prev)
+        prev->snext = new_node;
+    else
+        ht->shead = new_node; /* New head */
+    if (current)
+        current->sprev = new_node;
+    else
+        ht->stail = new_node; /* New tail */
+    return (1);
 }
 
 /**
