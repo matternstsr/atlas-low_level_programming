@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "search_algos.h"
 
 /**
 * exponential_search - Searches for a value in a sorted array using
