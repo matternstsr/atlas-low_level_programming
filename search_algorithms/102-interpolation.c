@@ -18,18 +18,25 @@ int interpolation_search(int *array, size_t size, int value)
 
 	if (array == NULL || size == 0)
 		return (-1);
+
 	/* position calculation */
 	pos = low + (((double)(high - low) / (array[high] - array[low])) *
 				(value - array[low]));
 	while (low <= high && value >= array[low] && value <= array[high])
 	{
 		printf("Value checked array[%lu] = [%d]\n", pos, array[pos]);
+
 		if (array[pos] == value)
 			return (pos);
+
 		if (array[pos] < value)
+		{
 			low = pos + 1;
+		}
 		else
+		{
 			high = pos - 1;
+		}
 		/* get position after modifying low or high */
 		pos = low + (((double)(high - low) / (array[high] - array[low])) *
 					(value - array[low]));
