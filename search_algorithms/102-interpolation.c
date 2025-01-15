@@ -18,22 +18,14 @@ int interpolation_search(int *array, size_t size, int value)
 
 	if (array == NULL || size == 0)
 		return (-1);
+	pos = low + (((double)(high - low) / (array[high] - array[low])) *
+			(value - array[low]));
 	while (low <= high && value >= array[low] && value <= array[high])
 	{
-		if (array[low] == array[high]) /* Prevent division by zero */
-			break;
-		pos = low + (((double)(high - low) / (array[high] - array[low])) *
-					(value - array[low]));
-		/* Check if pos is out of range */
-		if (pos >= size)
-		{
-			printf("Value checked array[%lu] is out of range\n", pos);
-			return (-1);
-		}
 		printf("Value checked array[%lu] = [%d]\n", pos, array[pos]);
 		if (array[pos] == value)
 			return (pos);
-		if (array[pos] < value)
+		else if (array[pos] < value)
 			low = pos + 1;
 		else
 			high = pos - 1;
